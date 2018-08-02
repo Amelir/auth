@@ -1,0 +1,16 @@
+{
+  "name": "auth",
+  "main": "src/index.js",
+  "repository": "git@github.com:amelir/auth.git",
+  "author": "amelir",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon"
+  },
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  }
+}
