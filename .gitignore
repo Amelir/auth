@@ -1,6 +1,9 @@
 /node_modules
 /dist
 
+# Config
+.env
+
 # Misc
 .DS_Store
 .DS_Store?

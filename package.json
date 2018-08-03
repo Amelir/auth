@@ -5,12 +5,15 @@
   "author": "amelir",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon"
+    "start": "DEBUG=app nodemon"
   },
   "dependencies": {
+    "debug": "^3.1.0",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3"
   },
   "devDependencies": {
+    "chokidar": "^2.0.4",
     "nodemon": "^1.18.3"
   }
 }
