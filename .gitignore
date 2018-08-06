@@ -4,6 +4,10 @@
 # Config
 .env
 
+# Logs
+/logs
+*.log
+
 # Misc
 .DS_Store
 .DS_Store?
