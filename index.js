@@ -1,6 +1,7 @@
 const boot = require('./boot');
 const chokidar = require('chokidar');
 const debug = require('debug')('app');
+const mongoose = require('mongoose');
 const path = require('path');
 
 // Load environmental variables
@@ -47,6 +48,9 @@ function restart(){
       socket.destroy();
     }
   });
+
+  mongoose.connection.models = {}
+  mongoose.models = {}
 
   state.sockets = [];
 
