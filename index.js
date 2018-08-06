@@ -15,7 +15,7 @@ const state = {
 boot()
   .then(() => {
     start();
-    chokidar.watch('./routes').on('all', (event, at) => {
+    chokidar.watch(['./routes', './schemas']).on('all', (event, at) => {
       if(event === 'change'){
         debug('Changes at', at);
         restart();
@@ -49,8 +49,9 @@ function restart(){
     }
   });
 
-  mongoose.connection.models = {}
   mongoose.models = {}
+  mongoose.modelSchemas = {}
+  mongoose.connection.models = {}
 
   state.sockets = [];
 

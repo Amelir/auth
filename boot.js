@@ -7,6 +7,7 @@ module.exports = function(){
     
     const dbUrl = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
     mongoose.connect(dbUrl, {useNewUrlParser: true});
+    mongoose.Promise = Promise;
 
     mongoose.connection.on('connected', () => {
       debug('Database connected');
