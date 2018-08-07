@@ -15,7 +15,7 @@ const state = {
 boot()
   .then(() => {
     start();
-    chokidar.watch(['./routes', './schemas']).on('all', (event, at) => {
+    chokidar.watch(['./routes', './schemas', './utils']).on('all', (event, at) => {
       if(event === 'change'){
         debug('Changes at', at);
         restart();

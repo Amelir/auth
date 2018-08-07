@@ -1,10 +1,15 @@
+const allowMethods = require('allow-methods');
 const bcrypt = require('bcrypt');
 const express = require('express');
 const User = require('../schemas/user');
+const errorHandler = require('../utils/errorHandler');
 
 const app = new express.Router();
 
-app.post('/', (req, res, next) => {
+app
+  .route('/')
+  .all(allowMethods(['post']))
+  .post((req, res, next) => {
     // Check if required data is present
     const requiredFields = ['email', 'password'];
     const missingFields = [];
@@ -51,5 +56,8 @@ app.post('/', (req, res, next) => {
 });
 
 app.use('/register', require('./register'));
+
+// Setup error handler
+app.use(errorHandler);
 
 module.exports = app;

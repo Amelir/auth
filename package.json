@@ -8,6 +8,7 @@
     "start": "DEBUG=app node ."
   },
   "dependencies": {
+    "allow-methods": "^2.0.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "chokidar": "^2.0.4",

@@ -1,8 +1,12 @@
+const allowMethods = require('allow-methods');
 const bcrypt = require('bcrypt');
 const route = require('express').Router();
 const User = require('../schemas/user');
 
-route.post('/', (req, res, next) => {
+route
+  .route('/')
+  .all(allowMethods(['post']))
+  .post((req, res, next) => {
   // Check if required data is present
   const requiredFields = ['firstName', 'lastName', 'email', 'password'];
   const missingFields = [];
