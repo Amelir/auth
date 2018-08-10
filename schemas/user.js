@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const TokenSchema = require('./TokenSchema');
 
 const UserSchema = new mongoose.Schema({
   firstName: {
@@ -30,7 +31,10 @@ const UserSchema = new mongoose.Schema({
   verified: {
     type: Boolean,
     default: false
-  }
+  },
+  tokens: [TokenSchema]
+}, {
+  versionKey: false
 });
 
 const User = module.exports = mongoose.model('Users', UserSchema);

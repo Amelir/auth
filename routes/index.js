@@ -1,8 +1,12 @@
 const allowMethods = require('allow-methods');
 const bcrypt = require('bcrypt');
 const express = require('express');
+const ms = require('ms');
+const jwt = require('jsonwebtoken');
 const User = require('../schemas/user');
 const errorHandler = require('../utils/errorHandler');
+const uuid = require('uuid/v1');
+const uuid4 = require('uuid/v4');
 
 const app = new express.Router();
 
@@ -44,11 +48,38 @@ app
             return;
           }
 
-          // Password matched. Update login time
-          model.lastLogin = Date.now()
-          model.save();
+          // Generate token data
+          const tokenData = {
+            id: (uuid4() + uuid()).replace(/-/g, ''),
+            date: new Date(),
+            exp: new Date(Date.now() + ms('1h'))
+          }
 
-          res.end();
+          // Save token in database
+          model.tokens.push({
+            id: tokenData.id,
+            issued: tokenData.date,
+            expires: tokenData.exp,
+            lastAccessed: tokenData.date
+          });
+
+          model.save()
+            .then(() => {
+              
+              // Create token
+              const token = jwt.sign({}, process.env.JWT_SECRET, {
+                issuer: 'AMELIR_AUTH',
+                audience: 'AMELIR',
+                subject: model.email,
+                jwtid: tokenData.id
+              });
+
+              res.send({
+                access_token: token,
+                token_type: 'bearer'
+              });
+            })
+            .catch(err => next(err));
         })
         .catch(err => next(err));
     })
