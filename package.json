@@ -1,24 +1,27 @@
 {
   "name": "auth",
-  "main": "src/index.js",
+  "version": "0.0.0-1",
+  "main": "routes/index.js",
   "repository": "git@github.com:amelir/auth.git",
   "author": "amelir",
   "license": "MIT",
   "scripts": {
-    "start": "DEBUG=app node ."
+    "start": "DEBUG=app node index"
   },
   "dependencies": {
     "allow-methods": "^2.0.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
-    "chokidar": "^2.0.4",
     "debug": "^3.1.0",
-    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.6",
     "morgan": "^1.9.0",
     "ms": "^2.1.1",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "chokidar": "^2.0.4",
+    "dotenv": "^6.0.0"
   }
 }

@@ -8,9 +8,9 @@ const errorHandler = require('../utils/errorHandler');
 const uuid = require('uuid/v1');
 const uuid4 = require('uuid/v4');
 
-const app = new express.Router();
+const route = new express.Router();
 
-app
+route
   .route('/')
   .all(allowMethods(['post']))
   .post((req, res, next) => {
@@ -86,9 +86,9 @@ app
     .catch(err => next(err));
 });
 
-app.use('/register', require('./register'));
+route.use('/register', require('./register'));
 
 // Setup error handler
-app.use(errorHandler);
+route.use(errorHandler);
 
-module.exports = app;
+module.exports = route;
