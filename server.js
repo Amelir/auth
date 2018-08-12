@@ -4,6 +4,7 @@ const fs = require('fs');
 const morgan = require('morgan');
 const path = require('path');
 const routes = require('./routes');
+const errorHandler = require('./utils/errorHandler');
 
 module.exports = function(){
   const app = express();
@@ -22,6 +23,8 @@ module.exports = function(){
   app.use(bodyParser.json());
 
   app.use('/', routes);
+
+  app.use(errorHandler);
 
   return app;
 }

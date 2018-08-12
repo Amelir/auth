@@ -15,7 +15,7 @@ const state = {
 boot()
   .then(() => {
     start();
-    chokidar.watch(['./routes', './schemas', './utils']).on('all', (event, at) => {
+    chokidar.watch(['./server.js', './routes', './schemas', './utils']).on('all', (event, at) => {
       if(event === 'change'){
         debug('Changes at', at);
         restart();
@@ -65,6 +65,8 @@ function restart(){
 function checkPath(id){
   return (
     id.startsWith(path.join(__dirname, 'routes')) ||
+    id.startsWith(path.join(__dirname, 'schemas')) ||
+    id.startsWith(path.join(__dirname, 'utils')) ||
     id.startsWith(path.join(__dirname, 'server.js'))
   );
 }

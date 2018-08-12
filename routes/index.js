@@ -4,7 +4,6 @@ const express = require('express');
 const ms = require('ms');
 const jwt = require('jsonwebtoken');
 const User = require('../schemas/user');
-const errorHandler = require('../utils/errorHandler');
 const uuid = require('uuid/v1');
 const uuid4 = require('uuid/v4');
 
@@ -87,8 +86,5 @@ route
 });
 
 route.use('/register', require('./register'));
-
-// Setup error handler
-route.use(errorHandler);
 
 module.exports = route;
