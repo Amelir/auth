@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const ms = require('ms');
 const User = require('./schemas/user');
 
 module.exports = function(req, res, next){
@@ -15,43 +16,41 @@ module.exports = function(req, res, next){
   }
 
   // Verify token validity
-  jwt.verify(token, process.env.JWT_SECRET, (err, data) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, tokenData) => {
     if(err) return next(error);
 
     // Get users tokens from DB
-    User.findOne({email: data.sub}, {tokens: 1})
+    User.findOne({email: tokenData.sub}, {tokens: 1})
       .then(model => {
-        let tokenValid = false;
         const date = new Date();
 
-        // No users were found
-        if(!model){
+        // Check if token exists in db
+        const foundToken = model.tokens.find(token => token.id === tokenData.jti);
+        if(!foundToken){
           return next(error);
         }
 
-        model.tokens.forEach((token, index) => {
-          // Remove token if it's expired
-          if(date > token.expires){
-            model.tokens.splice(index, 1);
-          }
-
-          // Check if token ID is in database, and is still valid
-          if(token.id === data.jti && token.expires > date){
-            tokenValid = true;
-          }
-        });
-
-        // Save updated tokens to database
-        model.save();
-
-        if(tokenValid){
-          // Save user data to request
-          req.user = data.sub;
-          
-          next();
-        }else{
-          next(error);
+        // Check if token is expired
+        const tokenExpired = date > foundToken.expires;
+        if(tokenExpired){
+          return next(error);
         }
-      });
+
+        // Update datetime of current token
+        foundToken.expires = new Date(Date.now() + ms(process.env.JWT_EXPIRES));
+        foundToken.lastAccessed = date;
+        model.markModified('tokens');
+
+        // Remove expired tokens from db
+        model.tokens = model.tokens.filter(token => date < token.expires);
+
+        // Save updated tokens
+        model.save(err => {
+          if(err) return next(err);
+
+          next();
+        });
+      })
+      .catch(err => next(err));
   });
 }

@@ -51,7 +51,7 @@ route
           const tokenData = {
             id: (uuid4() + uuid()).replace(/-/g, ''),
             date: new Date(),
-            exp: new Date(Date.now() + ms('1h'))
+            exp: new Date(Date.now() + ms(process.env.JWT_EXPIRES))
           }
 
           // Save token in database
