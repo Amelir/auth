@@ -1,8 +1,8 @@
-const boot = require('./boot');
 const chokidar = require('chokidar');
 const debug = require('debug')('app');
 const mongoose = require('mongoose');
 const path = require('path');
+const schemas = require('schemas');
 
 // Load environmental variables
 require('dotenv').config();
@@ -12,7 +12,7 @@ const state = {
   sockets: []
 }
 
-boot()
+schemas.init()
   .then(() => {
     start();
     chokidar.watch(['./server.js', './routes', './schemas', './utils']).on('all', (event, at) => {

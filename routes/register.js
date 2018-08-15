@@ -1,7 +1,7 @@
 const allowMethods = require('allow-methods');
 const bcrypt = require('bcrypt');
 const route = require('express').Router();
-const User = require('../schemas/user');
+const { User } = require('schemas').models;
 
 route
   .route('/')

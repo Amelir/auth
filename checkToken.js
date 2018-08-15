@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const ms = require('ms');
-const User = require('./schemas/user');
+const { User } = require('schemas').models;
 
 module.exports = function(req, res, next){
   // Create error to throw in case token is invalid

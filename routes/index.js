@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const ms = require('ms');
 const jwt = require('jsonwebtoken');
-const User = require('../schemas/user');
+const { User } = require('schemas').models;
 const uuid = require('uuid/v1');
 const uuid4 = require('uuid/v4');
 
@@ -29,61 +29,61 @@ route
       return;
     }
 
-  // Get user from database
-  User.findOne({email: req.body.email})
-    .then(model => {
-      
-      // Fail if no user was found
-      if(!model){
-        res.status(401).send({message: 'Incorrect username or password.'});
-        return;
-      }
+    // Get user from database
+    User.findOne({email: req.body.email})
+      .then(model => {
+        
+        // Fail if no user was found
+        if(!model){
+          res.status(401).send({message: 'Incorrect username or password.'});
+          return;
+        }
 
-      // Compare hash
-      bcrypt.compare(req.body.password, model.hash)
-        .then(match => {
-          if(!match){
-            res.status(401).send({message: 'Incorrect username or password.'});
-            return;
-          }
+        // Compare hash
+        bcrypt.compare(req.body.password, model.hash)
+          .then(match => {
+            if(!match){
+              res.status(401).send({message: 'Incorrect username or password.'});
+              return;
+            }
 
-          // Generate token data
-          const tokenData = {
-            id: (uuid4() + uuid()).replace(/-/g, ''),
-            date: new Date(),
-            exp: new Date(Date.now() + ms(process.env.JWT_EXPIRES))
-          }
+            // Generate token data
+            const tokenData = {
+              id: (uuid4() + uuid()).replace(/-/g, ''),
+              date: new Date(),
+              exp: new Date(Date.now() + ms(process.env.JWT_EXPIRES))
+            }
 
-          // Save token in database
-          model.tokens.push({
-            id: tokenData.id,
-            issued: tokenData.date,
-            expires: tokenData.exp,
-            lastAccessed: tokenData.date
-          });
+            // Save token in database
+            model.tokens.push({
+              id: tokenData.id,
+              issued: tokenData.date,
+              expires: tokenData.exp,
+              lastAccessed: tokenData.date
+            });
 
-          model.save()
-            .then(() => {
-              
-              // Create token
-              const token = jwt.sign({}, process.env.JWT_SECRET, {
-                issuer: 'AMELIR_AUTH',
-                audience: 'AMELIR',
-                subject: model.email,
-                jwtid: tokenData.id
-              });
+            model.save()
+              .then(() => {
+                
+                // Create token
+                const token = jwt.sign({}, process.env.JWT_SECRET, {
+                  issuer: 'AMELIR_AUTH',
+                  audience: 'AMELIR',
+                  subject: model.email,
+                  jwtid: tokenData.id
+                });
 
-              res.send({
-                access_token: token,
-                token_type: 'bearer'
-              });
-            })
-            .catch(err => next(err));
-        })
-        .catch(err => next(err));
-    })
-    .catch(err => next(err));
-});
+                res.send({
+                  access_token: token,
+                  token_type: 'bearer'
+                });
+              })
+              .catch(err => next(err));
+          })
+          .catch(err => next(err));
+      })
+      .catch(err => next(err));
+  });
 
 route.use('/register', require('./register'));
 
