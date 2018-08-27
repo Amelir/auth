@@ -86,5 +86,6 @@ route
   });
 
 route.use('/register', require('./register'));
+route.use('/logout', require('./logout'));
 
 module.exports = route;

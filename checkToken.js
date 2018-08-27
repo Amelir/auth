@@ -48,6 +48,9 @@ module.exports = function(req, res, next){
         model.save(err => {
           if(err) return next(err);
 
+          // Save user data to request
+          req.user = tokenData;
+
           next();
         });
       })
