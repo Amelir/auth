@@ -1,6 +1,6 @@
 {
   "name": "auth",
-  "version": "0.0.0-3",
+  "version": "0.0.0-4",
   "main": "routes/index.js",
   "repository": "git@github.com:amelir/auth.git",
   "author": "amelir",
@@ -18,11 +18,13 @@
     "mongoose": "^5.2.6",
     "morgan": "^1.9.0",
     "ms": "^2.1.1",
-    "schemas": "github:amelir/schemas",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
     "chokidar": "^2.0.4",
     "dotenv": "^6.0.0"
+  },
+  "peerDependencies": {
+    "schemas": "github:amelir/schemas"
   }
 }
