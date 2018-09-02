@@ -4,6 +4,7 @@ const express = require('express');
 const ms = require('ms');
 const jwt = require('jsonwebtoken');
 const { User } = require('schemas').models;
+const useragent = require('useragent');
 const uuid = require('uuid/v1');
 const uuid4 = require('uuid/v4');
 
@@ -54,12 +55,23 @@ route
               exp: new Date(Date.now() + ms(process.env.JWT_EXPIRES))
             }
 
+            // Parse useragent
+            const ua = {
+              browser: undefined,
+              os: undefined
+            }
+
+            const agent = useragent.parse(req.headers['user-agent']);
+            ua.browser = agent.family || 'Other';
+            ua.os = agent.os.family || 'Other';
+
             // Save token in database
             model.tokens.push({
               id: tokenData.id,
               issued: tokenData.date,
               expires: tokenData.exp,
-              lastAccessed: tokenData.date
+              lastAccessed: tokenData.date,
+              device: ua
             });
 
             model.save()
